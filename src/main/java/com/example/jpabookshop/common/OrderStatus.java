@@ -4,7 +4,8 @@ public enum OrderStatus {
 
     READY("준비"),
     IN_PROGRESS("진행중"),
-    DONE("완료");
+    DONE("완료"),
+    CANCEL("취소");
 
     private String value;
 
