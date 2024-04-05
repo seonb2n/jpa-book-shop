@@ -2,6 +2,7 @@ package com.example.jpabookshop.service;
 
 import com.example.jpabookshop.domain.Member;
 import com.example.jpabookshop.repository.MemberRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class MemberService {
     }
 
     public Member findOne(Long memberId) {
-        return memberRepository.findOne(memberId);
+        return memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
     }
 
 }
