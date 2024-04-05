@@ -2,6 +2,7 @@ package com.example.jpabookshop.service;
 
 import com.example.jpabookshop.domain.item.Item;
 import com.example.jpabookshop.repository.ItemRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,6 @@ public class ItemService {
     }
 
     public Item findOne(Long itemId) {
-        return itemRepository.findOne(itemId);
+        return itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
     }
 }

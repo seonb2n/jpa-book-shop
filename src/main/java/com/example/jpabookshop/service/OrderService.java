@@ -1,5 +1,7 @@
 package com.example.jpabookshop.service;
 
+import static org.springframework.data.jpa.domain.Specification.*;
+
 import com.example.jpabookshop.domain.Delivery;
 import com.example.jpabookshop.domain.Member;
 import com.example.jpabookshop.domain.Order;
@@ -8,6 +10,7 @@ import com.example.jpabookshop.domain.item.Item;
 import com.example.jpabookshop.repository.MemberRepository;
 import com.example.jpabookshop.repository.OrderRepository;
 import com.example.jpabookshop.util.OrderSearch;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +30,7 @@ public class OrderService {
     ItemService itemService;
 
     public Long order(Long memberId, Long itemId, int count) {
-        Member member = memberRepository.findOne(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
         Item item = itemService.findOne(itemId);
 
         Delivery delivery = new Delivery(member.getAddress());
@@ -40,12 +43,12 @@ public class OrderService {
     }
 
     public void cancelOrder(Long orderId) {
-        Order order = orderRepository.findOne(orderId);
+        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
         order.cancel();
     }
 
     public List<Order> findOrders(OrderSearch orderSearch) {
-        return orderRepository.findALl(orderSearch);
+        return orderRepository.findAll(orderSearch.toSpecification());
     }
 
 }
