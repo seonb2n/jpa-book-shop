@@ -29,15 +29,35 @@ class OrderServiceTest {
 
     @Test
     public void 상품주문() throws Exception {
+        //given
         Member member = createMember();
         Item item = createBook("책 1", 10000, 100);
         int orderCount = 2;
 
+        //when
         Long orderId = orderService.order(member.getId(), item.getId(), orderCount);
 
+        //then
+        Order getOrder = orderRepository.findOne(orderId);
+        assertEquals(OrderStatus.READY, getOrder.getStatus());
+    }
+
+    @Test
+    public void 주문취소() {
+        //given
+        Member member = createMember();
+        Item item = createBook("책 1", 10000, 100);
+        int orderCount = 2;
+
+        //when
+        Long orderId = orderService.order(member.getId(), item.getId(), orderCount);
+        orderService.cancelOrder(orderId);
+
+        // then
         Order getOrder = orderRepository.findOne(orderId);
 
-        assertEquals(OrderStatus.READY, getOrder.getStatus());
+        assertEquals(OrderStatus.CANCEL, getOrder.getStatus());
+        assertEquals(100, item.getStockQuantity());
     }
 
     private Member createMember() {
