@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.jpabookshop.domain.Address;
 import com.example.jpabookshop.domain.Member;
@@ -42,18 +43,36 @@ public class JpaTest {
 
     @Test
     @Transactional
-    Member testFirstLevelCacheIsolation2() {
+    void testFirstLevelCacheIsolation2() {
         Member member = createMember();
         assertNotNull(member);
-        return member;
     }
 
     @Test
     @Transactional
-    Member testFirstLevelCacheIsolation3() {
+    void testFirstLevelCacheIsolation3() {
         Member member = findMember();
         assertNull(member);
-        return member;
+    }
+
+    @Test
+    @Transactional
+    void testDetachedEntityToMerged() {
+        Member member = createMember();
+        em1.close(); // 영속성 컨텍스트 1 종료
+
+        member.setName("new_name");
+
+        Member mergedMember = em2.merge(member);
+
+        System.out.println(member.hashCode());
+        System.out.println(mergedMember.hashCode());
+        System.out.println(mergedMember.getName());
+
+        assertTrue(em2.contains(member)); // 책 116, 118 쪽에 나온 내용과 다르다.
+        assertTrue(em2.contains(mergedMember));
+        assertEquals(member, mergedMember);
+        assertEquals(member.getName(), mergedMember.getName());
     }
 
 //    @Test
