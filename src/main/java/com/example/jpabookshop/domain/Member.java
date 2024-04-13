@@ -31,11 +31,17 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<Order>();
 
+    @Transient
     private String firstName;
 
+    @Transient
+    private String lastName;
+
+    private String fullName;
+
     @Access(AccessType.PROPERTY)
-    public String getFirstName() {
-        return "Mr. " + firstName;
+    public String getFullName() {
+        return firstName + lastName;
     }
 
 }
