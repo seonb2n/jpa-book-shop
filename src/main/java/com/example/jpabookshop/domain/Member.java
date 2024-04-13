@@ -1,11 +1,14 @@
 package com.example.jpabookshop.domain;
 
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -27,5 +30,12 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<Order>();
+
+    private String firstName;
+
+    @Access(AccessType.PROPERTY)
+    public String getFirstName() {
+        return "Mr. " + firstName;
+    }
 
 }

@@ -22,10 +22,14 @@ class MemberServiceTest {
     public void 회원가입() throws Exception {
         Member member = new Member();
         member.setName("kim");
+        member.setFirstName("sb");
 
         Long saveId = memberService.join(member);
 
-        assertEquals(member, memberRepository.findById(saveId));
+        Member foundMember = memberRepository.findById(saveId).get();
+
+        assertEquals(member, foundMember);
+        assertEquals("Mr. Mr. sb", member.getFirstName());
     }
 
 }
