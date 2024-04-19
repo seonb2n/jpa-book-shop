@@ -6,7 +6,6 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.Getter;
 
 @Entity
-@DiscriminatorValue("A")
 @Getter
 public class Album extends Item {
 

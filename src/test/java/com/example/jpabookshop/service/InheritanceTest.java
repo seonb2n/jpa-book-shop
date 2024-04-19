@@ -44,6 +44,11 @@ public class InheritanceTest {
           inheritance single_table 인 경우엔 쿼리가 다음과 같이 발생한다.
           insert into item (name,price,stock_quantity,author,isbn,dtype,item_id) values (?,?,?,?,?,'B',?)
          */
+
+        /*
+          inheritance table_per_class 인 경우엔 쿼리가 다음과 같이 발생한다.
+          insert into book (name,price,stock_quantity,author,isbn,item_id) values (?,?,?,?,?,?)
+         */
     }
 
     @Test
@@ -70,6 +75,21 @@ public class InheritanceTest {
           select i1_0.item_id,i1_0.dtype,i1_0.name,i1_0.price,i1_0.stock_quantity,i1_0.artist,i1_0.etc,i1_0.author,i1_0.isbn,i1_0.actor,i1_0.director
           from item i1_0
           where i1_0.item_id=?
+         */
+
+        /*
+          inheritance table_per_class 인 경우엔 쿼리가 다음과 같이 발생한다.
+          elect i1_0.item_id,i1_0.clazz_,i1_0.name,i1_0.price,i1_0.stock_quantity,i1_0.artist,i1_0.etc,i1_0.author,i1_0.isbn,i1_0.actor,i1_0.director
+          from
+            (select price, stock_quantity, item_id, artist, etc, name, null as author, null as isbn, null as actor, null as director, 1 as clazz_
+              from album
+              union all
+             select price, stock_quantity, item_id, null as artist, null as etc, name, author, isbn, null as actor, null as director, 2 as clazz_
+               from book
+              union all
+             select price, stock_quantity, item_id, null as artist, null as etc, name, null as author, null as isbn, actor, director, 3 as clazz_
+               from movie) i1_0
+           where i1_0.item_id=?
          */
 
         assertEquals("책 1", foundItem.getName());

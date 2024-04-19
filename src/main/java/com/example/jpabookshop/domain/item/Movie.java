@@ -6,7 +6,6 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.Getter;
 
 @Entity
-@DiscriminatorValue("M")
 @Getter
 public class Movie extends Item {
 
