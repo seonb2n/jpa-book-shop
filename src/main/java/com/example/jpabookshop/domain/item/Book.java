@@ -2,6 +2,7 @@ package com.example.jpabookshop.domain.item;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import lombok.Setter;
 @DiscriminatorValue("B")
 @Getter
 @Setter
+@PrimaryKeyJoinColumn(name = "BOOK_ID")
 public class Book extends Item {
 
     private String author;

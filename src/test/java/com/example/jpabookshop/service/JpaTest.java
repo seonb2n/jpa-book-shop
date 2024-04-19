@@ -60,6 +60,7 @@ public class JpaTest {
     void testDetachedEntityToMerged() {
         Member member = createMember();
         em1.close(); // 영속성 컨텍스트 1 종료
+        assertTrue(em2.contains(member)); // 책 116, 118 쪽에 나온 내용과 다르다.
 
         member.setName("new_name");
 
