@@ -8,8 +8,6 @@ import lombok.Getter;
 @Entity
 @DiscriminatorValue("M")
 @Getter
-@PrimaryKeyJoinColumn(name = "MOVIE_ID")
-
 public class Movie extends Item {
 
     private String director;

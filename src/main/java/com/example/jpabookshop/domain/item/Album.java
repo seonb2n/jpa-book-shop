@@ -8,7 +8,6 @@ import lombok.Getter;
 @Entity
 @DiscriminatorValue("A")
 @Getter
-@PrimaryKeyJoinColumn(name = "ALBUM_ID")
 public class Album extends Item {
 
     private String artist;

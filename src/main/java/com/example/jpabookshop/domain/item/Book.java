@@ -10,7 +10,6 @@ import lombok.Setter;
 @DiscriminatorValue("B")
 @Getter
 @Setter
-@PrimaryKeyJoinColumn(name = "BOOK_ID")
 public class Book extends Item {
 
     private String author;

@@ -36,10 +36,14 @@ public class InheritanceTest {
 
         /*
           inheritance joined 인 경우엔 쿼리가 다음과 같이 발생한다.
-          Hibernate: insert into item (name,price,stock_quantity,dtype,item_id) values (?,?,?,'B',?)
-          Hibernate: insert into book (author,isbn,book_id) values (?,?,?)
+          insert into item (name,price,stock_quantity,dtype,item_id) values (?,?,?,'B',?)
+          insert into book (author,isbn,book_id) values (?,?,?)
          */
 
+        /*
+          inheritance single_table 인 경우엔 쿼리가 다음과 같이 발생한다.
+          insert into item (name,price,stock_quantity,author,isbn,dtype,item_id) values (?,?,?,?,?,'B',?)
+         */
     }
 
     @Test
@@ -59,6 +63,13 @@ public class InheritanceTest {
            left join movie i1_3
             on i1_0.item_id=i1_3.movie_id
             where i1_0.item_id=?
+         */
+
+        /*
+          inheritance single_table 인 경우엔 쿼리가 다음과 같이 발생한다.
+          select i1_0.item_id,i1_0.dtype,i1_0.name,i1_0.price,i1_0.stock_quantity,i1_0.artist,i1_0.etc,i1_0.author,i1_0.isbn,i1_0.actor,i1_0.director
+          from item i1_0
+          where i1_0.item_id=?
          */
 
         assertEquals("책 1", foundItem.getName());
