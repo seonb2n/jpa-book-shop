@@ -115,11 +115,14 @@ public class InheritanceTest {
         Item foundItem = itemRepository.findById(1L).get();
         // select i1_0.item_id,i1_0.clazz_,i1_0.name,i1_0.price,i1_0.stock_quantity,i1_0.artist,i1_0.etc,i1_0.author,i1_0.isbn,i1_0.actor,i1_0.director from (select price, stock_quantity, item_id, artist, etc, name, null as author, null as isbn, null as actor, null as director, 1 as clazz_ from album union all select price, stock_quantity, item_id, null as artist, null as etc, name, author, isbn, null as actor, null as director, 2 as clazz_ from book union all select price, stock_quantity, item_id, null as artist, null as etc, name, null as author, null as isbn, actor, director, 3 as clazz_ from movie) i1_0 where i1_0.item_id=?
 
+        foundItem.setName("책 2");
+
         Book book = em.createQuery("SELECT b from Book b where b.id = 1", Book.class)
             .getSingleResult();
         // 쿼리가 나간다 select b1_0.item_id,b1_0.name,b1_0.price,b1_0.stock_quantity,b1_0.author,b1_0.isbn from book b1_0 where b1_0.item_id=1
 
-        assertEquals(book.getName(), foundItem.getName());
+        assertEquals(book.getName(), foundItem.getName()); // db 에서 값을 조회하나, 영속성 컨텍스트에 있는 값이 이미 존재하기에 해당 값을 반환한다.
+        assertEquals(book.hashCode(), foundItem.hashCode());
     }
 
     private Book createBook(String name, int price, int stockQuantity) {
