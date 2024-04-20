@@ -9,6 +9,7 @@ import com.example.jpabookshop.domain.item.Item;
 import com.example.jpabookshop.repository.ItemRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -93,6 +94,35 @@ public class InheritanceTest {
          */
 
         assertEquals("책 1", foundItem.getName());
+    }
+
+    @Test
+    public void JPQL_영속성_컨텍스트_JPQL먼저() {
+        Book book = em.createQuery("SELECT b from Book b where b.id = 1", Book.class)
+            .getSingleResult();
+        // 쿼리가 나간다 select b1_0.item_id,b1_0.name,b1_0.price,b1_0.stock_quantity,b1_0.author,b1_0.isbn from book b1_0 where b1_0.item_id=1
+
+        Item foundItem = itemRepository.findById(1L).get();
+        // 영속성 컨텍스트에 이미 해당 아이템이 있기 때문에 쿼리가 db 로 나가지 않는다.
+
+        assertEquals(book.getName(), foundItem.getName());
+    }
+
+    @Test
+    public void JPQL_영속성_컨텍스트_JPQL나중에() {
+        em.clear();
+
+        Item foundItem = itemRepository.findById(1L).get();
+        // select i1_0.item_id,i1_0.clazz_,i1_0.name,i1_0.price,i1_0.stock_quantity,i1_0.artist,i1_0.etc,i1_0.author,i1_0.isbn,i1_0.actor,i1_0.director from (select price, stock_quantity, item_id, artist, etc, name, null as author, null as isbn, null as actor, null as director, 1 as clazz_ from album union all select price, stock_quantity, item_id, null as artist, null as etc, name, author, isbn, null as actor, null as director, 2 as clazz_ from book union all select price, stock_quantity, item_id, null as artist, null as etc, name, null as author, null as isbn, actor, director, 3 as clazz_ from movie) i1_0 where i1_0.item_id=?
+
+        foundItem.setName("책 2");
+
+        Book book = em.createQuery("SELECT b from Book b where b.id = 1", Book.class)
+            .getSingleResult();
+        // 쿼리가 나간다 select b1_0.item_id,b1_0.name,b1_0.price,b1_0.stock_quantity,b1_0.author,b1_0.isbn from book b1_0 where b1_0.item_id=1
+
+        assertEquals(book.getName(), foundItem.getName()); // db 에서 값을 조회하나, 영속성 컨텍스트에 있는 값이 이미 존재하기에 해당 값을 반환한다.
+        assertEquals(book.hashCode(), foundItem.hashCode());
     }
 
     private Book createBook(String name, int price, int stockQuantity) {
